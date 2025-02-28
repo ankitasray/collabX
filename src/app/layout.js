@@ -1,8 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import { ClerkProvider, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { ClerkProvider, ClerkLoaded, ClerkLoading, SignedIn,SignedOut, RedirectToSignIn } from "@clerk/nextjs";
 import Loader from "@/components/Loader";
+import { redirect } from "next/navigation";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +33,7 @@ export default function RootLayout({ children }) {
       <ClerkLoaded>
         
         {children}
+        
       </ClerkLoaded>
         
       </body>
