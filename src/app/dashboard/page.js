@@ -54,88 +54,101 @@
 //     </div>
 //   );
 // }
-"use client"
+"use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; 
 import { UserButton } from "@clerk/nextjs";
 import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  // 🔹 Navigate to different pages WITHOUT closing sidebar
+  const handleNavigation = (path) => {
+    router.push(path);
+  };
 
   return (
     <div className="flex h-screen w-screen bg-gray-100">
-      {/* Sidebar (Full Height & Fixed for Desktop) */}
+      {/* Sidebar */}
       <div
         className={`fixed md:relative inset-y-0 left-0 h-full w-64 bg-gray-900 text-white transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out md:translate-x-0 md:w-72 md:block`}
       >
-        <div className="p-6">
-          <h2 className="text-2xl font-semibold">CollabX</h2>
-          <nav className="mt-6 space-y-2">
-            <a href="/dashboard" className="block py-3 px-5 hover:bg-gray-800 rounded-lg">
-              🏠 Dashboard
-            </a>
-            <a href="/post" className="block py-3 px-5 hover:bg-gray-800 rounded-lg">
-              📝 Create Post
-            </a>
-            <a href="/analytics" className="block py-3 px-5 hover:bg-gray-800 rounded-lg">
-              📊 Analytics
-            </a>
-            <a href="/settings" className="block py-3 px-5 hover:bg-gray-800 rounded-lg">
-              ⚙️ Settings
-            </a>
-          </nav>
+        <div className="p-6 flex justify-between items-center">
+          <h2 className="text-2xl font-semibold">🚀 CollabX</h2>
+          {/* Cross Button (Only for Mobile) */}
+          <button
+            className="text-white md:hidden"
+            onClick={() => setIsOpen(false)}
+          >
+            <FiX size={28} />
+          </button>
         </div>
+        <nav className="mt-6 space-y-2">
+          <button
+            onClick={() => handleNavigation("/dashboard")}
+            className="block w-full text-left py-3 px-5 hover:bg-gray-800 rounded-lg"
+          >
+            🏠 Dashboard
+          </button>
+          <button
+            onClick={() => handleNavigation("/post")}
+            className="block w-full text-left py-3 px-5 hover:bg-gray-800 rounded-lg"
+          >
+            📝 Create Post
+          </button>
+          <button
+            onClick={() => handleNavigation("/analytics")}
+            className="block w-full text-left py-3 px-5 hover:bg-gray-800 rounded-lg"
+          >
+            📊 Analytics
+          </button>
+          <button
+            onClick={() => handleNavigation("/settings")}
+            className="block w-full text-left py-3 px-5 hover:bg-gray-800 rounded-lg"
+          >
+            ⚙️ Settings
+          </button>
+        </nav>
         <div className="p-5 border-t border-gray-700">
           <UserButton afterSignOutUrl="/" />
         </div>
       </div>
 
-      {/* Main Content (Full Width) */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col w-full">
-        {/* Header (Fixed Top Bar) */}
+        {/* Header */}
         <header className="bg-white shadow-md flex justify-between items-center px-8 py-4 w-full">
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen(true)}
             className="text-gray-700 md:hidden"
           >
-            {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+            <FiMenu size={28} />
           </button>
           <h2 className="text-2xl font-semibold">📊 Dashboard</h2>
           <UserButton />
         </header>
 
-        {/* Dashboard Content (Takes Full Height & Width) */}
+        {/* Dashboard Content */}
         <div className="flex-1 p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-full">
-          {/* Widget 1 */}
-          <div className="bg-white shadow-lg p-8 rounded-lg border border-gray-200 w-full h-48 flex flex-col justify-center">
+          <div className="bg-white shadow-lg p-8 rounded-lg border border-gray-200 flex flex-col justify-center">
             <h3 className="text-xl font-semibold text-gray-700">Total Posts</h3>
             <p className="text-4xl font-bold text-blue-600 mt-2">120</p>
           </div>
-
-          {/* Widget 2 */}
-          <div className="bg-white shadow-lg p-8 rounded-lg border border-gray-200 w-full h-48 flex flex-col justify-center">
+          <div className="bg-white shadow-lg p-8 rounded-lg border border-gray-200 flex flex-col justify-center">
             <h3 className="text-xl font-semibold text-gray-700">Scheduled Posts</h3>
             <p className="text-4xl font-bold text-green-500 mt-2">45</p>
           </div>
-
-          {/* Widget 3 */}
-          <div className="bg-white shadow-lg p-8 rounded-lg border border-gray-200 w-full h-48 flex flex-col justify-center">
+          <div className="bg-white shadow-lg p-8 rounded-lg border border-gray-200 flex flex-col justify-center">
             <h3 className="text-xl font-semibold text-gray-700">Followers Gained</h3>
             <p className="text-4xl font-bold text-purple-500 mt-2">3,500</p>
           </div>
         </div>
       </div>
-
-      {/* Overlay for Mobile Sidebar */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black opacity-50 md:hidden"
-          onClick={() => setIsOpen(false)}
-        ></div>
-      )}
     </div>
   );
 }
